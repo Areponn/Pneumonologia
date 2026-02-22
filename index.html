@@ -6,250 +6,133 @@
 <title>Pneumonologia – narzędzia kliniczne</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #1c2330;
-    --border: #30363d;
-    --accent: #58a6ff;
-    --text: #e6edf3;
-    --text-muted: #8b949e;
-    --low: #3fb950;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 3rem 1.5rem;
-  }
-
-  .container { max-width: 900px; margin: 0 auto; }
-
-  /* HEADER */
-  header {
-    margin-bottom: 3.5rem;
-  }
-
-  .site-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-
-  .site-title {
-    font-size: 2.2rem;
-    font-weight: 300;
-    line-height: 1.2;
-    color: var(--text);
-    border-left: 3px solid var(--accent);
-    padding-left: 1.25rem;
-  }
-
-  .site-title strong {
-    font-weight: 600;
-    display: block;
-  }
-
-  .site-subtitle {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    margin-top: 1rem;
-    padding-left: 1.25rem;
-    border-left: 3px solid transparent;
-  }
-
-  /* SECTION LABEL */
-  .section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  /* CARDS GRID */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
-    margin-bottom: 3rem;
-  }
-
-  /* TOOL CARD */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.5rem;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    transition: border-color 0.2s, transform 0.15s, background 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--accent);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .card:hover {
-    border-color: #444c56;
-    background: #1c2330;
-    transform: translateY(-2px);
-  }
-
-  .card:hover::before { opacity: 1; }
-
-  .card-badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: #1a2a3d;
-    border: 1px solid #2a3f5f;
-    border-radius: 20px;
-    padding: 0.15rem 0.6rem;
-    display: inline-block;
-    width: fit-content;
-  }
-
-  .card-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.3;
-  }
-
-  .card-full-name {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-  }
-
-  .card-desc {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    flex: 1;
-  }
-
-  .card-arrow {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: 0.5rem;
-    transition: color 0.15s, transform 0.15s;
-    display: inline-block;
-  }
-
-  .card:hover .card-arrow {
-    color: var(--accent);
-    transform: translateX(4px);
-  }
-
-  /* COMING SOON CARD */
-  .card.soon {
-    opacity: 0.45;
-    pointer-events: none;
-    cursor: default;
-  }
-
-  .card.soon::before { display: none; }
-
-  .card-badge.soon-badge {
-    color: var(--text-muted);
-    background: var(--surface2);
-    border-color: var(--border);
-  }
-
-  /* FOOTER */
-  footer {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    font-size: 0.73rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-
-  @media (max-width: 500px) {
-    .site-title { font-size: 1.6rem; }
-    .cards { grid-template-columns: 1fr; }
-  }
+  :root { --bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--accent:#58a6ff;--text:#e6edf3;--text-muted:#8b949e; }
+  * { box-sizing:border-box;margin:0;padding:0; }
+  body { font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:3rem 1.5rem; }
+  .container { max-width:960px;margin:0 auto; }
+  header { margin-bottom:3rem; }
+  .site-tag { font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:600;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem; }
+  .site-title { font-size:2.2rem;font-weight:300;line-height:1.2;color:var(--text);border-left:3px solid var(--accent);padding-left:1.25rem; }
+  .site-title strong { font-weight:600;display:block; }
+  .site-subtitle { font-size:0.88rem;color:var(--text-muted);margin-top:1rem;padding-left:calc(1.25rem + 3px); }
+  .section-label { font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.9rem;margin-top:2.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border); }
+  .cards { display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem; }
+  .card { background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.4rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:0.5rem;transition:border-color 0.2s,transform 0.15s,background 0.2s;position:relative;overflow:hidden; }
+  .card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);opacity:0;transition:opacity 0.2s; }
+  .card:hover { border-color:#444c56;background:#1c2330;transform:translateY(-2px); }
+  .card:hover::before { opacity:1; }
+  .card-badge { font-family:'IBM Plex Mono',monospace;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);background:#1a2a3d;border:1px solid #2a3f5f;border-radius:20px;padding:0.15rem 0.6rem;display:inline-block;width:fit-content; }
+  .card-title { font-size:1rem;font-weight:600;color:var(--text);line-height:1.3; }
+  .card-full-name { font-size:0.77rem;color:var(--text-muted);line-height:1.4; }
+  .card-desc { font-size:0.81rem;color:var(--text-muted);line-height:1.5;flex:1; }
+  .card-arrow { font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;transition:color 0.15s,transform 0.15s;display:inline-block; }
+  .card:hover .card-arrow { color:var(--accent);transform:translateX(4px); }
+  footer { margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:0.73rem;color:var(--text-muted);line-height:1.6; }
+  @media(max-width:500px) { .site-title{font-size:1.6rem;}.cards{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
 <div class="container">
-
   <header>
     <div class="site-tag">Narzędzia kliniczne</div>
-    <h1 class="site-title">
-      Pneumonologia
-      <strong>Narzędzia kliniczne</strong>
-    </h1>
+    <h1 class="site-title">Pneumonologia <strong>Narzędzia kliniczne</strong></h1>
     <p class="site-subtitle">Interaktywne kalkulatory i skale oceny klinicznej dla specjalistów</p>
   </header>
 
-  <div class="section-label">Dostępne kalkulatory</div>
-
+  <div class="section-label">Rozstrzenie oskrzeli</div>
   <div class="cards">
-
-    <!-- BSI -->
     <a href="bsi/" class="card">
       <span class="card-badge">BSI</span>
       <div class="card-title">Bronchiectasis Severity Index</div>
       <div class="card-full-name">Skala ciężkości rozstrzeni oskrzeli</div>
-      <div class="card-desc">Ocena ryzyka hospitalizacji, zaostrzeń i śmiertelności u pacjentów z rozstrzeniami oskrzeli. Maks. 24 punkty.</div>
+      <div class="card-desc">Ocena ryzyka hospitalizacji, zaostrzeń i śmiertelności. Maks. 24 punkty.</div>
       <span class="card-arrow">Otwórz kalkulator →</span>
     </a>
+  </div>
 
-    <!-- PLACEHOLDER 2 -->
-    <div class="card soon">
-      <span class="card-badge soon-badge">Wkrótce</span>
-      <div class="card-title">FACED</div>
-      <div class="card-full-name">Skala FACED</div>
-      <div class="card-desc">Wieloczynnikowy wskaźnik prognostyczny dla rozstrzeni oskrzeli.</div>
-      <span class="card-arrow">Niedostępny →</span>
-    </div>
+  <div class="section-label">Przewlekła obturacyjna choroba płuc (POChP)</div>
+  <div class="cards">
+    <a href="cat/" class="card">
+      <span class="card-badge">CAT</span>
+      <div class="card-title">COPD Assessment Test</div>
+      <div class="card-full-name">Ocena wpływu POChP na stan zdrowia</div>
+      <div class="card-desc">8-pytaniowy kwestionariusz oceniający wpływ POChP na codzienne funkcjonowanie. Maks. 40 punktów.</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
+    <a href="mmrc/" class="card">
+      <span class="card-badge">mMRC</span>
+      <div class="card-title">Skala duszności mMRC</div>
+      <div class="card-full-name">Modified Medical Research Council Dyspnea Scale</div>
+      <div class="card-desc">Pięciostopniowa skala oceny nasilenia duszności (stopnie 0–4).</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
+  </div>
 
-    <!-- PLACEHOLDER 3 -->
-    <div class="card soon">
-      <span class="card-badge soon-badge">Wkrótce</span>
-      <div class="card-title">CAT</div>
-      <div class="card-full-name">COPD Assessment Test</div>
-      <div class="card-desc">Ocena wpływu POChP na stan zdrowia pacjenta.</div>
-      <span class="card-arrow">Niedostępny →</span>
-    </div>
+  <div class="section-label">Zatorowość płucna</div>
+  <div class="cards">
+    <a href="wells/" class="card">
+      <span class="card-badge">Wells PE</span>
+      <div class="card-title">Skala Wellsa</div>
+      <div class="card-full-name">Kliniczne prawdopodobieństwo zatorowości płucnej</div>
+      <div class="card-desc">Ocena klinicznego prawdopodobieństwa ZP. Trójstopniowa klasyfikacja: niskie / pośrednie / wysokie.</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
+    <a href="geneva/" class="card">
+      <span class="card-badge">Geneva</span>
+      <div class="card-title">Zrewidowana Skala Genewska</div>
+      <div class="card-full-name">Revised Geneva Score</div>
+      <div class="card-desc">Alternatywna skala prawdopodobieństwa klinicznego ZP oparta wyłącznie na obiektywnych parametrach.</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
+    <a href="pesi/" class="card">
+      <span class="card-badge">PESI / sPESI</span>
+      <div class="card-title">PESI i sPESI</div>
+      <div class="card-full-name">Pulmonary Embolism Severity Index</div>
+      <div class="card-desc">Ocena ciężkości i śmiertelności w ostrej ZP. Pełna i uproszczona wersja skali.</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
+  </div>
 
+  <div class="section-label">Bezdech senny</div>
+  <div class="cards">
+    <a href="epworth/" class="card">
+      <span class="card-badge">ESS</span>
+      <div class="card-title">Skala Senności Epworth</div>
+      <div class="card-full-name">Epworth Sleepiness Scale</div>
+      <div class="card-desc">Ocena nadmiernej senności dziennej w 8 typowych sytuacjach. Maks. 24 punkty.</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
+    <a href="stopbang/" class="card">
+      <span class="card-badge">STOP-BANG</span>
+      <div class="card-title">Kwestionariusz STOP-BANG</div>
+      <div class="card-full-name">Przesiewowa ocena ryzyka OBS</div>
+      <div class="card-desc">8-pytaniowy kwestionariusz przesiewowy w kierunku obturacyjnego bezdechu sennego.</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
+  </div>
+
+  <div class="section-label">Śródmiąższowe choroby płuc</div>
+  <div class="cards">
+    <a href="gap/" class="card">
+      <span class="card-badge">GAP</span>
+      <div class="card-title">GAP Index</div>
+      <div class="card-full-name">Gender · Age · Physiology – IPF</div>
+      <div class="card-desc">Ocena rokowania w idiopatycznym włóknieniu płuc. Śmiertelność 1-, 2- i 3-letnia.</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
+    <a href="hesti/" class="card">
+      <span class="card-badge">Hesti</span>
+      <div class="card-title">Kryteria Hesti</div>
+      <div class="card-full-name">Alergiczne zapalenie pęcherzyków płucnych</div>
+      <div class="card-desc">Diagnostyczna ocena wiarygodności rozpoznania AZPP (HP) wg kryteriów ERS 2022.</div>
+      <span class="card-arrow">Otwórz kalkulator →</span>
+    </a>
   </div>
 
   <footer>
     Narzędzia mają charakter pomocniczy i nie zastępują oceny klinicznej.<br>
     Kalkulatory oparte na aktualnych wytycznych i publikacjach naukowych.
   </footer>
-
 </div>
 </body>
 </html>
