@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skala duszności mMRC</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--accent:#58a6ff;--text:#e6edf3;--text-muted:#8b949e;--low:#3fb950;--mid:#d29922;--high:#f85149;--btn-bg:#21262d;--btn-hover:#2d333b;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem 3rem;}
+  .container{max-width:860px;margin:0 auto;}
+  .back-link{display:inline-flex;align-items:center;gap:0.4rem;color:var(--text-muted);text-decoration:none;font-size:0.78rem;margin-bottom:1.25rem;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:4px;transition:color 0.15s,border-color 0.15s,background 0.15s;}
+  .back-link:hover{color:var(--accent);border-color:var(--accent);background:#1a2a3d;}
+  header{border-left:3px solid var(--accent);padding-left:1.25rem;margin-bottom:2.5rem;}
+  header .tag{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:600;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;}
+  header h1{font-size:1.6rem;font-weight:300;margin-top:0.25rem;}
+  header p{font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem;}
+  .grade-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.4rem 1.5rem;margin-bottom:0.8rem;cursor:pointer;transition:border-color 0.2s,background 0.2s;position:relative;}
+  .grade-card:hover{border-color:#444c56;background:#1c2330;}
+  .grade-card.selected{border-color:var(--accent);background:#1a2a3d;}
+  .grade-card.selected::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:8px 0 0 8px;}
+  .grade-header{display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;}
+  .grade-num{font-family:'IBM Plex Mono',monospace;font-size:1.6rem;font-weight:600;color:var(--text-muted);width:40px;flex-shrink:0;transition:color 0.2s;}
+  .grade-card.selected .grade-num{color:var(--accent);}
+  .grade-title{font-size:0.9rem;font-weight:600;color:var(--text);}
+  .grade-desc{font-size:0.85rem;color:var(--text-muted);line-height:1.5;padding-left:56px;}
+  .grade-card.selected .grade-desc{color:var(--text);}
+  .result-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-top:1.75rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center;}
+  .grade-big{font-family:'IBM Plex Mono',monospace;font-size:4.5rem;font-weight:600;line-height:1;transition:color 0.35s;min-width:100px;text-align:center;}
+  .grade-label{font-size:0.68rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;text-align:center;margin-top:0.2rem;}
+  .result-right{flex:1;min-width:200px;}
+  .severity-label{font-size:1.2rem;font-weight:600;margin-bottom:0.4rem;transition:color 0.35s;}
+  .result-desc{font-size:0.87rem;color:var(--text-muted);line-height:1.6;}
+  .c-0{color:var(--low);}.c-1{color:var(--low);}.c-2{color:var(--mid);}.c-3{color:var(--mid);}.c-4{color:var(--high);}
+  .source{margin-top:1.25rem;font-size:0.73rem;color:var(--text-muted);line-height:1.6;padding:0.75rem 1rem;border-left:2px solid var(--border);}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../" class="back-link">← Strona główna</a>
+  <header>
+    <div class="tag">Kalkulator kliniczny</div>
+    <h1>Skala duszności mMRC</h1>
+    <p>Modified Medical Research Council Dyspnea Scale · stopnie 0–4</p>
+  </header>
+
+  <div id="grades-container"></div>
+
+  <div class="result-panel">
+    <div>
+      <div class="grade-big c-0" id="grade-num">0</div>
+      <div class="grade-label">stopień mMRC</div>
+    </div>
+    <div class="result-right">
+      <div class="severity-label c-0" id="sev-label">Brak istotnej duszności</div>
+      <div class="result-desc" id="sev-desc">Duszność tylko przy bardzo dużym wysiłku fizycznym. Brak ograniczeń w codziennej aktywności.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    Bestall JC, et al. Usefulness of the Medical Research Council (MRC) dyspnoea scale as a measure of disability in patients with chronic obstructive pulmonary disease. <em>Thorax</em> 1999; 54(7): 581–586.
+  </div>
+</div>
+
+<script>
+const GRADES = [
+  { grade:0, title:'Stopień 0', desc:'Duszność tylko przy bardzo dużym wysiłku fizycznym (np. wchodzenie po bardzo stromym wzniesieniu, szybki bieg)', severity:'Brak istotnej duszności', interp:'Duszność tylko przy bardzo dużym wysiłku fizycznym. Brak ograniczeń w codziennej aktywności.', cls:'c-0' },
+  { grade:1, title:'Stopień 1', desc:'Duszność przy szybkim marszu po równym terenie lub wchodzeniu na niewielkie wzniesienie', severity:'Łagodna duszność', interp:'Duszność ogranicza aktywność przy większym wysiłku. Wskazana dalsza ocena wydolności wysiłkowej.', cls:'c-1' },
+  { grade:2, title:'Stopień 2', desc:'Chodzi wolniej niż osoby w tym samym wieku z powodu duszności lub musi się zatrzymywać podczas marszu po równym terenie we własnym tempie', severity:'Umiarkowana duszność', interp:'Duszność istotnie ogranicza aktywność fizyczną. Wskazana rehabilitacja pulmonologiczna i ocena farmakoterapii.', cls:'c-2' },
+  { grade:3, title:'Stopień 3', desc:'Musi się zatrzymywać po przejściu około 100 metrów lub po kilku minutach marszu po równym terenie', severity:'Ciężka duszność', interp:'Znaczne ograniczenie aktywności. Konieczna intensyfikacja leczenia i rehabilitacja oddechowa.', cls:'c-3' },
+  { grade:4, title:'Stopień 4', desc:'Zbyt duszny/a, by wyjść z domu, lub duszność przy ubieraniu się lub rozbieraniu', severity:'Bardzo ciężka duszność', interp:'Duszność uniemożliwia samodzielne funkcjonowanie. Wskazana pilna ocena specjalistyczna i kompleksowa opieka.', cls:'c-4' },
+];
+
+let selected = 0;
+
+const container = document.getElementById('grades-container');
+GRADES.forEach(g => {
+  const card = document.createElement('div');
+  card.className = 'grade-card' + (g.grade === 0 ? ' selected' : '');
+  card.id = 'grade-card-' + g.grade;
+  card.innerHTML = `
+    <div class="grade-header">
+      <span class="grade-num">${g.grade}</span>
+      <span class="grade-title">${g.title}</span>
+    </div>
+    <div class="grade-desc">${g.desc}</div>`;
+  card.addEventListener('click', () => selectGrade(g.grade));
+  container.appendChild(card);
+});
+
+function selectGrade(grade) {
+  selected = grade;
+  GRADES.forEach(g => {
+    document.getElementById('grade-card-' + g.grade).classList.toggle('selected', g.grade === grade);
+  });
+  const g = GRADES[grade];
+  document.getElementById('grade-num').textContent = grade;
+  document.getElementById('grade-num').className = 'grade-big ' + g.cls;
+  const sevEl = document.getElementById('sev-label');
+  sevEl.textContent = g.severity;
+  sevEl.className = 'severity-label ' + g.cls;
+  document.getElementById('sev-desc').textContent = g.interp;
+}
+</script>
+</body>
+</html>
