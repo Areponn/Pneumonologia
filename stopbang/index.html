@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skala Senności Epworth (ESS)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --surface2: #1c2330;
+    --border: #30363d; --accent: #58a6ff; --text: #e6edf3;
+    --text-muted: #8b949e; --low: #3fb950; --mid: #d29922; --high: #f85149;
+    --btn-bg: #21262d; --btn-hover: #2d333b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 3rem; }
+  .container { max-width: 860px; margin: 0 auto; }
+  .back-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-muted); text-decoration: none; font-size: 0.78rem; margin-bottom: 1.25rem; padding: 0.3rem 0.6rem; border: 1px solid var(--border); border-radius: 4px; transition: color 0.15s, border-color 0.15s, background 0.15s; }
+  .back-link:hover { color: var(--accent); border-color: var(--accent); background: #1a2a3d; }
+  header { border-left: 3px solid var(--accent); padding-left: 1.25rem; margin-bottom: 2rem; }
+  header .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; font-weight: 600; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+  header h1 { font-size: 1.6rem; font-weight: 300; margin-top: 0.25rem; }
+  header p { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.4rem; }
+  .reset-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: none; border: 1px solid var(--border); border-radius: 5px; color: var(--text-muted); cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; padding: 0.4rem 0.85rem; margin-bottom: 1.2rem; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+  .reset-btn:hover { background: var(--btn-hover); color: var(--high); border-color: var(--high); }
+  .param-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem 1.5rem; margin-bottom: 0.8rem; transition: border-color 0.2s; }
+  .param-block:hover { border-color: #444c56; }
+  .param-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; gap: 1rem; }
+  .param-name { font-size: 0.95rem; font-weight: 500; color: var(--text); flex: 1; }
+  .param-score { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; transition: color 0.2s; }
+  .param-score.scored { color: var(--accent); font-weight: 600; }
+  .btn-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .opt-btn { background: var(--btn-bg); border: 1px solid var(--border); border-radius: 5px; color: var(--text-muted); cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; padding: 0.4rem 0.8rem; transition: background 0.15s, border-color 0.15s, color 0.15s; user-select: none; line-height: 1.4; }
+  .opt-btn:hover { background: var(--btn-hover); border-color: #58a6ff88; color: var(--text); }
+  .opt-btn.selected { background: #1a2a3d; border-color: var(--accent); color: var(--text); font-weight: 600; }
+  .opt-btn .pts { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; margin-left: 0.3rem; opacity: 0.55; }
+  .opt-btn.selected .pts { opacity: 1; color: var(--accent); }
+  .result-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-top: 1.75rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: flex-start; }
+  .score-circle { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 100px; }
+  .score-number { font-family: 'IBM Plex Mono', monospace; font-size: 4rem; font-weight: 600; line-height: 1; transition: color 0.35s; }
+  .score-max { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.2rem; font-family: 'IBM Plex Mono', monospace; }
+  .result-right { flex: 1; min-width: 200px; }
+  .severity-label { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.2rem; transition: color 0.35s; }
+  .severity-range { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.6rem; }
+  .result-desc { font-size: 0.87rem; color: var(--text-muted); line-height: 1.6; }
+  .breakdown { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); width: 100%; }
+  .breakdown-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.5rem; }
+  .breakdown-bar-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; }
+  .blabel { width: 220px; flex-shrink: 0; color: var(--text-muted); font-size: 0.75rem; }
+  .blabel.has { color: var(--text); }
+  .bar-track { flex: 1; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.3s ease; }
+  .bscore { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; width: 28px; text-align: right; color: var(--text-muted); }
+  .bscore.has { color: var(--accent); font-weight: 600; }
+  .c-low { color: var(--low); } .c-mid { color: var(--mid); } .c-high { color: var(--high); }
+  .source { margin-top: 1.25rem; font-size: 0.73rem; color: var(--text-muted); line-height: 1.6; padding: 0.75rem 1rem; border-left: 2px solid var(--border); }
+  @media (max-width: 580px) { header h1 { font-size: 1.3rem; } .score-number { font-size: 3rem; } .result-panel { gap: 1.25rem; } .blabel { width: 150px; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../" class="back-link">← Strona główna</a>
+  <header>
+    <div class="tag">Kalkulator kliniczny</div>
+    <h1>Skala Senności Epworth (ESS)</h1>
+    <p>Epworth Sleepiness Scale · ocena nadmiernej senności dziennej · maks. 24 punkty</p>
+  </header>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Resetuj wszystkie pola</button>
+
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:0.85rem 1rem;margin-bottom:1rem;font-size:0.83rem;color:var(--text-muted);line-height:1.5;">
+    Oceń prawdopodobieństwo zaśnięcia (nie tylko uczucie zmęczenia) w poniższych sytuacjach:<br>
+    <strong style="color:var(--text);">0</strong> = nigdy · <strong style="color:var(--text);">1</strong> = małe · <strong style="color:var(--text);">2</strong> = umiarkowane · <strong style="color:var(--text);">3</strong> = duże
+  </div>
+
+  <div id="questions-container"></div>
+
+  <div class="result-panel">
+    <div class="score-circle">
+      <div class="score-number c-low" id="score-num">0</div>
+      <div class="score-max">/ 24 pkt</div>
+    </div>
+    <div class="result-right">
+      <div class="severity-label c-low" id="sev-label">Prawidłowa senność</div>
+      <div class="severity-range" id="sev-range">ESS 0–10</div>
+      <div class="result-desc" id="sev-desc">Brak nadmiernej senności dziennej.</div>
+      <div class="breakdown">
+        <div class="breakdown-title">Składowe punktacji</div>
+        <div id="breakdown-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="source">
+    Johns MW. A new method for measuring daytime sleepiness: the Epworth sleepiness scale. <em>Sleep</em> 1991; 14(6): 540–545.
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  { id: 'q1', label: 'Siedzenie i czytanie' },
+  { id: 'q2', label: 'Oglądanie telewizji' },
+  { id: 'q3', label: 'Siedzenie bezczynnie w miejscu publicznym (np. teatr, zebranie)' },
+  { id: 'q4', label: 'Jazda jako pasażer przez co najmniej godzinę' },
+  { id: 'q5', label: 'Leżenie i odpoczywanie po południu' },
+  { id: 'q6', label: 'Siedzenie i rozmawianie z kimś' },
+  { id: 'q7', label: 'Spokojne siedzenie po obiedzie (bez alkoholu)' },
+  { id: 'q8', label: 'W samochodzie, stojąc kilka minut w korku' },
+];
+
+const OPTIONS = [
+  { val: 0, label: 'Nigdy' },
+  { val: 1, label: 'Małe' },
+  { val: 2, label: 'Umiarkowane' },
+  { val: 3, label: 'Duże' },
+];
+
+const OUTCOMES = [
+  { max: 10, label: 'Prawidłowa senność',       range: 'ESS 0–10',  cls: 'c-low',  desc: 'Brak nadmiernej senności dziennej. Wynik w normie.' },
+  { max: 15, label: 'Łagodna nadmierna senność', range: 'ESS 11–15', cls: 'c-mid',  desc: 'Łagodna nadmierna senność dzienna. Wskazana dalsza ocena kliniczna i badanie polisomnograficzne.' },
+  { max: 24, label: 'Ciężka nadmierna senność',  range: 'ESS 16–24', cls: 'c-high', desc: 'Ciężka nadmierna senność dzienna. Konieczna pilna diagnostyka — podejrzenie obturacyjnego bezdechu sennego lub innego zaburzenia snu.' },
+];
+
+const state = {};
+QUESTIONS.forEach(q => state[q.id] = 0);
+const DEFAULTS = {};
+
+// Build UI
+const container = document.getElementById('questions-container');
+QUESTIONS.forEach((q, qi) => {
+  DEFAULTS[q.id] = 0;
+  const block = document.createElement('div');
+  block.className = 'param-block';
+  block.innerHTML = `
+    <div class="param-header">
+      <span class="param-name">${qi + 1}. ${q.label}</span>
+      <span class="param-score" id="sc-${q.id}">0 pkt</span>
+    </div>
+    <div class="btn-group" data-param="${q.id}">
+      ${OPTIONS.map((o, oi) => `<button class="opt-btn${oi === 0 ? ' selected' : ''}" data-val="${o.val}">${o.label} <span class="pts">+${o.val}</span></button>`).join('')}
+    </div>`;
+  container.appendChild(block);
+});
+
+document.querySelectorAll('.btn-group').forEach(group => {
+  const param = group.dataset.param;
+  const btns = group.querySelectorAll('.opt-btn');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state[param] = parseInt(btn.dataset.val) || 0;
+      render();
+    });
+  });
+});
+
+function render() {
+  let total = 0;
+  QUESTIONS.forEach(q => total += state[q.id]);
+  document.getElementById('score-num').textContent = total;
+
+  const o = OUTCOMES.find(o => total <= o.max);
+  document.getElementById('score-num').className = 'score-number ' + o.cls;
+  const sevEl = document.getElementById('sev-label');
+  sevEl.textContent = o.label; sevEl.className = 'severity-label ' + o.cls;
+  document.getElementById('sev-range').textContent = o.range;
+  document.getElementById('sev-desc').textContent = o.desc;
+
+  QUESTIONS.forEach(q => {
+    const el = document.getElementById('sc-' + q.id);
+    if (!el) return;
+    const pts = state[q.id];
+    el.textContent = pts + ' pkt';
+    el.className = 'param-score' + (pts > 0 ? ' scored' : '');
+  });
+
+  const body = document.getElementById('breakdown-body');
+  body.innerHTML = '';
+  QUESTIONS.forEach((q, qi) => {
+    const pts = state[q.id];
+    const has = pts > 0;
+    const row = document.createElement('div');
+    row.className = 'breakdown-bar-row';
+    row.innerHTML = `<span class="blabel${has?' has':''}">${qi+1}. ${q.label.substring(0,30)}${q.label.length>30?'…':''}</span><div class="bar-track"><div class="bar-fill" style="width:${pts/3*100}%"></div></div><span class="bscore${has?' has':''}">+${pts}</span>`;
+    body.appendChild(row);
+  });
+}
+
+function resetAll() {
+  document.querySelectorAll('.btn-group').forEach(group => {
+    const btns = group.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.classList.remove('selected'));
+    btns[0].classList.add('selected');
+    state[group.dataset.param] = 0;
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
