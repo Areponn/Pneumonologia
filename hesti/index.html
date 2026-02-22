@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kryteria Hesti – Alergiczne Zapalenie Pęcherzyków Płucnych</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--accent:#58a6ff;--text:#e6edf3;--text-muted:#8b949e;--low:#3fb950;--mid:#d29922;--high:#f85149;--btn-bg:#21262d;--btn-hover:#2d333b;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem 3rem;}
+  .container{max-width:860px;margin:0 auto;}
+  .back-link{display:inline-flex;align-items:center;gap:0.4rem;color:var(--text-muted);text-decoration:none;font-size:0.78rem;margin-bottom:1.25rem;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:4px;transition:color 0.15s,border-color 0.15s,background 0.15s;}
+  .back-link:hover{color:var(--accent);border-color:var(--accent);background:#1a2a3d;}
+  header{border-left:3px solid var(--accent);padding-left:1.25rem;margin-bottom:2rem;}
+  header .tag{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:600;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;}
+  header h1{font-size:1.6rem;font-weight:300;margin-top:0.25rem;}
+  header p{font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem;}
+  .reset-btn{display:inline-flex;align-items:center;gap:0.4rem;background:none;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:0.82rem;padding:0.4rem 0.85rem;margin-bottom:1.2rem;transition:background 0.15s,color 0.15s,border-color 0.15s;}
+  .reset-btn:hover{background:var(--btn-hover);color:var(--high);border-color:var(--high);}
+  .section-label{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem;margin-top:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);}
+  .param-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.4rem;margin-bottom:0.7rem;transition:border-color 0.2s;}
+  .param-block:hover{border-color:#444c56;}
+  .param-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.75rem;gap:1rem;}
+  .param-name{font-size:0.92rem;font-weight:500;color:var(--text);flex:1;line-height:1.4;}
+  .param-sub{font-size:0.77rem;color:var(--text-muted);margin-top:0.2rem;line-height:1.4;}
+  .param-score{font-family:'IBM Plex Mono',monospace;font-size:0.8rem;color:var(--text-muted);white-space:nowrap;flex-shrink:0;transition:color 0.2s;}
+  .param-score.scored{color:var(--accent);font-weight:600;}
+  .btn-group{display:flex;flex-wrap:wrap;gap:0.5rem;}
+  .opt-btn{background:var(--btn-bg);border:1px solid var(--border);border-radius:5px;color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:0.83rem;padding:0.4rem 0.95rem;transition:background 0.15s,border-color 0.15s,color 0.15s;user-select:none;}
+  .opt-btn:hover{background:var(--btn-hover);border-color:#58a6ff88;color:var(--text);}
+  .opt-btn.selected{background:#1a2a3d;border-color:var(--accent);color:var(--text);font-weight:600;}
+  .opt-btn .pts{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;margin-left:0.3rem;opacity:0.55;}
+  .opt-btn.selected .pts{opacity:1;color:var(--accent);}
+  .result-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-top:1.75rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;}
+  .score-circle{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:100px;}
+  .score-number{font-family:'IBM Plex Mono',monospace;font-size:4rem;font-weight:600;line-height:1;transition:color 0.35s;}
+  .score-max{font-size:0.68rem;color:var(--text-muted);margin-top:0.2rem;font-family:'IBM Plex Mono',monospace;text-align:center;}
+  .result-right{flex:1;min-width:200px;}
+  .severity-label{font-size:1.25rem;font-weight:600;margin-bottom:0.2rem;transition:color 0.35s;}
+  .severity-range{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-muted);margin-bottom:0.6rem;}
+  .result-desc{font-size:0.87rem;color:var(--text-muted);line-height:1.6;}
+  .c-low{color:var(--low);}.c-mid{color:var(--mid);}.c-high{color:var(--high);}
+  .source{margin-top:1.25rem;font-size:0.73rem;color:var(--text-muted);line-height:1.6;padding:0.75rem 1rem;border-left:2px solid var(--border);}
+  @media(max-width:580px){header h1{font-size:1.2rem;}.score-number{font-size:3rem;}.result-panel{gap:1.25rem;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../" class="back-link">← Strona główna</a>
+  <header>
+    <div class="tag">Kalkulator kliniczny</div>
+    <h1>Kryteria Hesti</h1>
+    <p>Diagnostyczna ocena alergicznego zapalenia pęcherzyków płucnych (AZPP / HP)</p>
+  </header>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Resetuj wszystkie pola</button>
+
+  <div class="section-label">Wywiad i ekspozycja</div>
+  <div id="section1"></div>
+  <div class="section-label">Badania dodatkowe</div>
+  <div id="section2"></div>
+  <div class="section-label">Badania inwazyjne</div>
+  <div id="section3"></div>
+
+  <div class="result-panel">
+    <div class="score-circle">
+      <div class="score-number c-low" id="score-num">0</div>
+      <div class="score-max">/ 14 pkt</div>
+    </div>
+    <div class="result-right">
+      <div class="severity-label c-low" id="sev-label">Niska wiarygodność</div>
+      <div class="severity-range" id="sev-range">Hesti &lt; 4</div>
+      <div class="result-desc" id="sev-desc">Niska wiarygodność diagnostyczna AZPP. Należy rozważyć inne rozpoznania.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    Hesti: Hypersensitivity pneumonitis — diagnostic score. Vasakova M, et al. European Respiratory Society guidelines on hypersensitivity pneumonitis. <em>Eur Respir J</em> 2022; 60: 2101590.
+  </div>
+</div>
+
+<script>
+const SECTIONS = {
+  section1: [
+    { id:'exposure', label:'Zidentyfikowany czynnik sprawczy', sub:'Udokumentowana ekspozycja na znany antygen wywołujący AZPP', options:[{l:'Nie',v:0},{l:'Tak',v:2}] },
+    { id:'symlink',  label:'Związek czasowy objawów z ekspozycją', sub:'Objawy nasilają się podczas ekspozycji lub ustępują po jej wyeliminowaniu', options:[{l:'Nie',v:0},{l:'Tak',v:2}] },
+    { id:'precip',   label:'Precypityny lub swoiste IgG', sub:'Dodatnie precypityny lub swoiste IgG przeciwko podejrzanemu antygenowi', options:[{l:'Nie/nieoznaczone',v:0},{l:'Tak',v:1}] },
+  ],
+  section2: [
+    { id:'hrct',     label:'Charakterystyczny obraz HRCT', sub:'Mozaikowość, "pułapka powietrzna", zacienienia szkliste, grudki centrilobularne', options:[{l:'Niecharakterystyczny',v:0},{l:'Charakterystyczny',v:2}] },
+    { id:'balf',     label:'Limfocytoza w BAL', sub:'Limfocytoza ≥ 30% (dla niepalących), ≥ 20% (dla palących)', options:[{l:'Nie/niewykonane',v:0},{l:'Tak',v:2}] },
+    { id:'fvc',      label:'Restrykcja w spirometrii lub obniżona DLCO', sub:'', options:[{l:'Nie',v:0},{l:'Tak',v:1}] },
+  ],
+  section3: [
+    { id:'histo',    label:'Histologia typowa dla AZPP', sub:'Bronchiolocentryczne zapalenie ziarniniakowe, nieswoiste śródmiąższowe zapalenie płuc', options:[{l:'Niewykonane/niecharakterystyczna',v:0},{l:'Sugestywna',v:1},{l:'Typowa',v:4}] },
+  ],
+};
+
+const OUTCOMES = [
+  { max:3,  label:'Niska wiarygodność',         range:'Hesti < 4',   cls:'c-low',  desc:'Niska wiarygodność diagnostyczna AZPP. Należy rozważyć inne rozpoznania i poszerzyć diagnostykę.' },
+  { max:5,  label:'Niska-pośrednia wiarygodność',range:'Hesti 4–5',  cls:'c-mid',  desc:'Niska-pośrednia wiarygodność. Wskazana dalsza diagnostyka (BAL, biopsja) lub obserwacja po eliminacji antygenu.' },
+  { max:8,  label:'Pośrednia wiarygodność',      range:'Hesti 6–8',  cls:'c-mid',  desc:'Pośrednia wiarygodność AZPP. Rozważyć multidyscyplinarną dyskusję i pogłębioną diagnostykę.' },
+  { max:14, label:'Wysoka wiarygodność',         range:'Hesti ≥ 9',  cls:'c-high', desc:'Wysoka wiarygodność diagnostyczna AZPP. Rozpoznanie AZPP prawdopodobne — wskazana eliminacja antygenu i leczenie.' },
+];
+
+const state = {};
+
+Object.entries(SECTIONS).forEach(([secId, params]) => {
+  const sec = document.getElementById(secId);
+  params.forEach(p => {
+    state[p.id] = 0;
+    const block = document.createElement('div');
+    block.className = 'param-block';
+    block.innerHTML = `
+      <div class="param-header">
+        <div style="flex:1">
+          <div class="param-name">${p.label}</div>
+          ${p.sub ? `<div class="param-sub">${p.sub}</div>` : ''}
+        </div>
+        <span class="param-score" id="sc-${p.id}">0 pkt</span>
+      </div>
+      <div class="btn-group" data-param="${p.id}">
+        ${p.options.map((o,i) => `<button class="opt-btn${i===0?' selected':''}" data-val="${o.v}">${o.l}${o.v>0?` <span class="pts">+${o.v}</span>`:''}</button>`).join('')}
+      </div>`;
+    sec.appendChild(block);
+  });
+});
+
+document.querySelectorAll('.btn-group').forEach(group => {
+  const param = group.dataset.param;
+  const btns = group.querySelectorAll('.opt-btn');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state[param] = parseInt(btn.dataset.val) || 0;
+      render();
+    });
+  });
+});
+
+function render() {
+  let total = 0;
+  Object.values(state).forEach(v => total += v);
+  document.getElementById('score-num').textContent = total;
+  const o = OUTCOMES.find(o => total <= o.max);
+  document.getElementById('score-num').className = 'score-number ' + o.cls;
+  const sevEl = document.getElementById('sev-label');
+  sevEl.textContent = o.label; sevEl.className = 'severity-label ' + o.cls;
+  document.getElementById('sev-range').textContent = o.range;
+  document.getElementById('sev-desc').textContent = o.desc;
+  Object.keys(state).forEach(id => {
+    const el = document.getElementById('sc-' + id);
+    if (!el) return;
+    const pts = state[id];
+    el.textContent = pts + ' pkt';
+    el.className = 'param-score' + (pts > 0 ? ' scored' : '');
+  });
+}
+
+function resetAll() {
+  document.querySelectorAll('.btn-group').forEach(group => {
+    const btns = group.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.classList.remove('selected'));
+    btns[0].classList.add('selected');
+    state[group.dataset.param] = 0;
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
