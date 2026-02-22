@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PESI / sPESI – Ciężkość Zatorowości Płucnej</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--accent:#58a6ff;--text:#e6edf3;--text-muted:#8b949e;--low:#3fb950;--mid:#d29922;--high:#f85149;--btn-bg:#21262d;--btn-hover:#2d333b;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem 3rem;}
+  .container{max-width:860px;margin:0 auto;}
+  .back-link{display:inline-flex;align-items:center;gap:0.4rem;color:var(--text-muted);text-decoration:none;font-size:0.78rem;margin-bottom:1.25rem;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:4px;transition:color 0.15s,border-color 0.15s,background 0.15s;}
+  .back-link:hover{color:var(--accent);border-color:var(--accent);background:#1a2a3d;}
+  header{border-left:3px solid var(--accent);padding-left:1.25rem;margin-bottom:2rem;}
+  header .tag{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:600;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;}
+  header h1{font-size:1.6rem;font-weight:300;margin-top:0.25rem;}
+  header p{font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem;}
+  .reset-btn{display:inline-flex;align-items:center;gap:0.4rem;background:none;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:0.82rem;padding:0.4rem 0.85rem;margin-bottom:1.2rem;transition:background 0.15s,color 0.15s,border-color 0.15s;}
+  .reset-btn:hover{background:var(--btn-hover);color:var(--high);border-color:var(--high);}
+  .section-label{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);}
+  .param-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin-bottom:0.65rem;transition:border-color 0.2s;}
+  .param-block:hover{border-color:#444c56;}
+  .param-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;gap:1rem;}
+  .param-name{font-size:0.92rem;font-weight:500;color:var(--text);flex:1;}
+  .param-note{font-size:0.75rem;color:var(--text-muted);font-style:italic;}
+  .param-score{font-family:'IBM Plex Mono',monospace;font-size:0.8rem;color:var(--text-muted);white-space:nowrap;flex-shrink:0;transition:color 0.2s;}
+  .param-score.scored{color:var(--accent);font-weight:600;}
+  .btn-group{display:flex;flex-wrap:wrap;gap:0.5rem;}
+  .opt-btn{background:var(--btn-bg);border:1px solid var(--border);border-radius:5px;color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:0.83rem;padding:0.4rem 1rem;transition:background 0.15s,border-color 0.15s,color 0.15s;user-select:none;}
+  .opt-btn:hover{background:var(--btn-hover);border-color:#58a6ff88;color:var(--text);}
+  .opt-btn.selected{background:#1a2a3d;border-color:var(--accent);color:var(--text);font-weight:600;}
+  .opt-btn .pts{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;margin-left:0.3rem;opacity:0.55;}
+  .opt-btn.selected .pts{opacity:1;color:var(--accent);}
+  .age-input{background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:1rem;padding:0.45rem 0.75rem;width:100px;outline:none;transition:border-color 0.2s;}
+  .age-input:focus{border-color:var(--accent);}
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.75rem;}
+  .result-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;}
+  .result-panel-title{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem;}
+  .score-number{font-family:'IBM Plex Mono',monospace;font-size:3rem;font-weight:600;line-height:1;transition:color 0.35s;}
+  .score-sub{font-size:0.68rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;margin-top:0.2rem;}
+  .severity-label{font-size:1rem;font-weight:600;margin-top:0.6rem;margin-bottom:0.2rem;transition:color 0.35s;}
+  .severity-range{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--text-muted);margin-bottom:0.4rem;}
+  .result-desc{font-size:0.8rem;color:var(--text-muted);line-height:1.5;}
+  .mort-box{background:var(--surface2);border-radius:4px;padding:0.5rem 0.6rem;margin-top:0.75rem;text-align:center;}
+  .mort-val{font-family:'IBM Plex Mono',monospace;font-size:1rem;font-weight:600;}
+  .mort-lbl{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;}
+  .c-low{color:var(--low);}.c-mid{color:var(--mid);}.c-high{color:var(--high);}
+  .source{margin-top:1.25rem;font-size:0.73rem;color:var(--text-muted);line-height:1.6;padding:0.75rem 1rem;border-left:2px solid var(--border);}
+  @media(max-width:600px){.results-grid{grid-template-columns:1fr;}.score-number{font-size:2.5rem;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../" class="back-link">← Strona główna</a>
+  <header>
+    <div class="tag">Kalkulator kliniczny</div>
+    <h1>PESI / sPESI</h1>
+    <p>Pulmonary Embolism Severity Index · ocena ciężkości i śmiertelności w ZP</p>
+  </header>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Resetuj wszystkie pola</button>
+
+  <!-- Wiek (wspólny) -->
+  <div class="param-block">
+    <div class="param-header">
+      <div>
+        <div class="param-name">Wiek pacjenta</div>
+        <div class="param-note">W skali PESI: wiek w latach dodawany jako punkty</div>
+      </div>
+      <span class="param-score" id="sc-age">— pkt</span>
+    </div>
+    <input type="number" class="age-input" id="age-input" placeholder="np. 67" min="15" max="120" oninput="render()">
+  </div>
+
+  <div class="section-label" style="margin-top:1rem;">Parametry kliniczne</div>
+
+  <div id="params-container"></div>
+
+  <!-- Wyniki -->
+  <div class="results-grid">
+    <div class="result-panel">
+      <div class="result-panel-title">PESI (pełna skala)</div>
+      <div class="score-number c-low" id="pesi-num">—</div>
+      <div class="score-sub">punktów</div>
+      <div class="severity-label c-low" id="pesi-label">—</div>
+      <div class="severity-range" id="pesi-range">—</div>
+      <div class="result-desc" id="pesi-desc">Wprowadź wiek pacjenta aby obliczyć.</div>
+      <div class="mort-box">
+        <div class="mort-val c-low" id="pesi-mort">—</div>
+        <div class="mort-lbl">Śmiertelność 30-dniowa</div>
+      </div>
+    </div>
+    <div class="result-panel">
+      <div class="result-panel-title">sPESI (uproszczona skala)</div>
+      <div class="score-number c-low" id="spesi-num">0</div>
+      <div class="score-sub">punktów</div>
+      <div class="severity-label c-low" id="spesi-label">Niskie ryzyko</div>
+      <div class="severity-range" id="spesi-range">sPESI = 0</div>
+      <div class="result-desc" id="spesi-desc">Niskie ryzyko wczesnego zgonu. Można rozważyć ambulatoryjne leczenie ZP.</div>
+      <div class="mort-box">
+        <div class="mort-val c-low" id="spesi-mort">1,0%</div>
+        <div class="mort-lbl">Śmiertelność 30-dniowa</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="source">
+    Aujesky D, et al. Derivation and validation of a prognostic model for pulmonary embolism. <em>Am J Respir Crit Care Med</em> 2005; 172(8): 1041–1046.<br>
+    Jiménez D, et al. Simplification of the pulmonary embolism severity index for prognostication in patients with acute symptomatic pulmonary embolism. <em>Arch Intern Med</em> 2010; 170(15): 1383–1389.
+  </div>
+</div>
+
+<script>
+// PESI params (excluding age which is handled separately)
+// pesi_pts: points for PESI; spesi: 1 if counts for sPESI, 0 if not
+const PARAMS = [
+  { id:'male',    label:'Płeć męska',                              pesi:10,  spesi:0 },
+  { id:'cancer',  label:'Aktywna choroba nowotworowa',             pesi:30,  spesi:1 },
+  { id:'hf',      label:'Przewlekła niewydolność serca',           pesi:10,  spesi:1 },
+  { id:'cpd',     label:'Przewlekła choroba płuc',                 pesi:10,  spesi:1 },
+  { id:'hr',      label:'Tętno ≥ 110/min',                        pesi:20,  spesi:1 },
+  { id:'sbp',     label:'Skurczowe RR < 100 mmHg',                pesi:30,  spesi:1 },
+  { id:'rr',      label:'Częstość oddechów > 30/min',             pesi:20,  spesi:0 },
+  { id:'temp',    label:'Temperatura ciała < 36°C',                pesi:20,  spesi:0 },
+  { id:'alt',     label:'Zaburzenia świadomości',                  pesi:60,  spesi:0 },
+  { id:'spo2',    label:'Saturacja O₂ < 90%',                     pesi:20,  spesi:1 },
+];
+
+const PESI_OUTCOMES = [
+  { max:65,  label:'Bardzo niskie ryzyko', range:'Klasa I (≤65)',    cls:'c-low',  mort:'0–1,6%' },
+  { max:85,  label:'Niskie ryzyko',        range:'Klasa II (66–85)', cls:'c-low',  mort:'1,7–3,5%' },
+  { max:105, label:'Umiarkowane ryzyko',   range:'Klasa III (86–105)',cls:'c-mid', mort:'3,2–7,1%' },
+  { max:125, label:'Wysokie ryzyko',       range:'Klasa IV (106–125)',cls:'c-high',mort:'4–11,4%' },
+  { max:9999,label:'Bardzo wysokie ryzyko',range:'Klasa V (>125)',   cls:'c-high', mort:'10–24,5%' },
+];
+
+const state = {};
+PARAMS.forEach(p => state[p.id] = 0);
+
+const container = document.getElementById('params-container');
+PARAMS.forEach(p => {
+  const block = document.createElement('div');
+  block.className = 'param-block';
+  const spesiTag = p.spesi ? `<span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;background:#1a2a3d;border:1px solid #2a3f5f;border-radius:3px;padding:1px 5px;color:var(--accent);margin-left:0.4rem;">sPESI</span>` : '';
+  block.innerHTML = `
+    <div class="param-header">
+      <span class="param-name">${p.label}${spesiTag}</span>
+      <span class="param-score" id="sc-${p.id}">Nie</span>
+    </div>
+    <div class="btn-group" data-param="${p.id}" data-pesi="${p.pesi}" data-spesi="${p.spesi}">
+      <button class="opt-btn selected" data-val="0">Nie</button>
+      <button class="opt-btn" data-val="1">Tak <span class="pts">PESI +${p.pesi}</span></button>
+    </div>`;
+  container.appendChild(block);
+});
+
+document.querySelectorAll('.btn-group').forEach(group => {
+  const param = group.dataset.param;
+  const btns = group.querySelectorAll('.opt-btn');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state[param] = parseInt(btn.dataset.val) || 0;
+      render();
+    });
+  });
+});
+
+function render() {
+  const age = parseInt(document.getElementById('age-input').value) || null;
+
+  // sPESI
+  let spesi = 0;
+  if (age !== null && age > 80) spesi += 1;
+  PARAMS.forEach(p => { if (state[p.id] && p.spesi) spesi += 1; });
+
+  document.getElementById('spesi-num').textContent = spesi;
+  if (spesi === 0) {
+    document.getElementById('spesi-num').className = 'score-number c-low';
+    document.getElementById('spesi-label').textContent = 'Niskie ryzyko';
+    document.getElementById('spesi-label').className = 'severity-label c-low';
+    document.getElementById('spesi-range').textContent = 'sPESI = 0';
+    document.getElementById('spesi-desc').textContent = 'Niskie ryzyko wczesnego zgonu. Można rozważyć ambulatoryjne leczenie ZP.';
+    document.getElementById('spesi-mort').textContent = '1,0%';
+    document.getElementById('spesi-mort').className = 'mort-val c-low';
+  } else {
+    document.getElementById('spesi-num').className = 'score-number c-high';
+    document.getElementById('spesi-label').textContent = 'Wysokie ryzyko';
+    document.getElementById('spesi-label').className = 'severity-label c-high';
+    document.getElementById('spesi-range').textContent = 'sPESI ≥ 1';
+    document.getElementById('spesi-desc').textContent = 'Podwyższone ryzyko wczesnego zgonu. Wskazana hospitalizacja i ścisły nadzór kliniczny.';
+    document.getElementById('spesi-mort').textContent = '10,9%';
+    document.getElementById('spesi-mort').className = 'mort-val c-high';
+  }
+
+  // PESI
+  if (age === null) {
+    document.getElementById('pesi-num').textContent = '—';
+    document.getElementById('pesi-label').textContent = '—';
+    document.getElementById('pesi-range').textContent = '—';
+    document.getElementById('pesi-desc').textContent = 'Wprowadź wiek pacjenta aby obliczyć.';
+    document.getElementById('pesi-mort').textContent = '—';
+    document.getElementById('sc-age').textContent = '— pkt';
+    document.getElementById('sc-age').className = 'param-score';
+    return;
+  }
+
+  document.getElementById('sc-age').textContent = age + ' pkt';
+  document.getElementById('sc-age').className = 'param-score scored';
+
+  let pesi = age;
+  PARAMS.forEach(p => { if (state[p.id]) pesi += p.pesi; });
+
+  document.getElementById('pesi-num').textContent = pesi;
+  const o = PESI_OUTCOMES.find(o => pesi <= o.max);
+  document.getElementById('pesi-num').className = 'score-number ' + o.cls;
+  document.getElementById('pesi-label').textContent = o.label;
+  document.getElementById('pesi-label').className = 'severity-label ' + o.cls;
+  document.getElementById('pesi-range').textContent = o.range;
+  document.getElementById('pesi-mort').textContent = o.mort;
+  document.getElementById('pesi-mort').className = 'mort-val ' + o.cls;
+  document.getElementById('pesi-desc').textContent = pesi <= 85 ? 'Niskie ryzyko. Rozważyć wczesne wypisanie lub leczenie ambulatoryjne.' : pesi <= 105 ? 'Umiarkowane ryzyko. Wskazana krótka hospitalizacja i obserwacja.' : 'Wysokie ryzyko. Konieczna hospitalizacja, intensywny nadzór i rozważenie leczenia reperfuzyjnego.';
+
+  PARAMS.forEach(p => {
+    const el = document.getElementById('sc-' + p.id);
+    if (!el) return;
+    el.textContent = state[p.id] ? 'Tak' : 'Nie';
+    el.className = 'param-score' + (state[p.id] ? ' scored' : '');
+  });
+}
+
+function resetAll() {
+  document.getElementById('age-input').value = '';
+  document.querySelectorAll('.btn-group').forEach(group => {
+    const btns = group.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.classList.remove('selected'));
+    btns[0].classList.add('selected');
+    state[group.dataset.param] = 0;
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
