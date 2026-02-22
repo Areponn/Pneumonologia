@@ -1,2 +1,2 @@
-# Pneumonologia---Narz-dzia-kliniczne
+# Pneumonologia
 Pneumonologia - Narzędzia kliniczne
