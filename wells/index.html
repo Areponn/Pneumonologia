@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skala Wellsa – Zatorowość Płucna</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--accent:#58a6ff;--text:#e6edf3;--text-muted:#8b949e;--low:#3fb950;--mid:#d29922;--high:#f85149;--btn-bg:#21262d;--btn-hover:#2d333b;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem 3rem;}
+  .container{max-width:860px;margin:0 auto;}
+  .back-link{display:inline-flex;align-items:center;gap:0.4rem;color:var(--text-muted);text-decoration:none;font-size:0.78rem;margin-bottom:1.25rem;padding:0.3rem 0.6rem;border:1px solid var(--border);border-radius:4px;transition:color 0.15s,border-color 0.15s,background 0.15s;}
+  .back-link:hover{color:var(--accent);border-color:var(--accent);background:#1a2a3d;}
+  header{border-left:3px solid var(--accent);padding-left:1.25rem;margin-bottom:2rem;}
+  header .tag{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:600;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;}
+  header h1{font-size:1.6rem;font-weight:300;margin-top:0.25rem;}
+  header p{font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem;}
+  .reset-btn{display:inline-flex;align-items:center;gap:0.4rem;background:none;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:0.82rem;padding:0.4rem 0.85rem;margin-bottom:1.2rem;transition:background 0.15s,color 0.15s,border-color 0.15s;}
+  .reset-btn:hover{background:var(--btn-hover);color:var(--high);border-color:var(--high);}
+  .param-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;margin-bottom:0.8rem;transition:border-color 0.2s;}
+  .param-block:hover{border-color:#444c56;}
+  .param-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;gap:1rem;}
+  .param-name{font-size:0.95rem;font-weight:500;color:var(--text);flex:1;}
+  .param-score{font-family:'IBM Plex Mono',monospace;font-size:0.8rem;color:var(--text-muted);white-space:nowrap;flex-shrink:0;transition:color 0.2s;}
+  .param-score.scored{color:var(--accent);font-weight:600;}
+  .btn-group{display:flex;flex-wrap:wrap;gap:0.5rem;}
+  .opt-btn{background:var(--btn-bg);border:1px solid var(--border);border-radius:5px;color:var(--text-muted);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;padding:0.45rem 1.2rem;transition:background 0.15s,border-color 0.15s,color 0.15s;user-select:none;}
+  .opt-btn:hover{background:var(--btn-hover);border-color:#58a6ff88;color:var(--text);}
+  .opt-btn.selected{background:#1a2a3d;border-color:var(--accent);color:var(--text);font-weight:600;}
+  .opt-btn .pts{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;margin-left:0.3rem;opacity:0.55;}
+  .opt-btn.selected .pts{opacity:1;color:var(--accent);}
+  .result-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-top:1.75rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;}
+  .score-circle{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:100px;}
+  .score-number{font-family:'IBM Plex Mono',monospace;font-size:4rem;font-weight:600;line-height:1;transition:color 0.35s;}
+  .score-label-sub{font-size:0.68rem;color:var(--text-muted);margin-top:0.2rem;font-family:'IBM Plex Mono',monospace;text-align:center;}
+  .result-right{flex:1;min-width:200px;}
+  .severity-label{font-size:1.25rem;font-weight:600;margin-bottom:0.2rem;transition:color 0.35s;}
+  .severity-range{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-muted);margin-bottom:0.6rem;}
+  .result-desc{font-size:0.87rem;color:var(--text-muted);line-height:1.6;}
+  .outcomes-row{display:grid;grid-template-columns:repeat(2,1fr);gap:0.6rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);width:100%;}
+  .outcome-box{background:var(--surface2);border-radius:5px;padding:0.6rem 0.75rem;text-align:center;}
+  .outcome-val{font-family:'IBM Plex Mono',monospace;font-size:1.05rem;font-weight:600;transition:color 0.35s;}
+  .outcome-lbl{font-size:0.67rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.2rem;}
+  .c-low{color:var(--low);}.c-mid{color:var(--mid);}.c-high{color:var(--high);}
+  .source{margin-top:1.25rem;font-size:0.73rem;color:var(--text-muted);line-height:1.6;padding:0.75rem 1rem;border-left:2px solid var(--border);}
+  @media(max-width:580px){header h1{font-size:1.3rem;}.score-number{font-size:3rem;}.result-panel{gap:1.25rem;}.outcomes-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../" class="back-link">← Strona główna</a>
+  <header>
+    <div class="tag">Kalkulator kliniczny</div>
+    <h1>Skala Wellsa – Zatorowość Płucna</h1>
+    <p>Ocena klinicznego prawdopodobieństwa zatorowości płucnej (PE)</p>
+  </header>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Resetuj wszystkie pola</button>
+
+  <div id="params-container"></div>
+
+  <div class="result-panel">
+    <div class="score-circle">
+      <div class="score-number c-low" id="score-num">0</div>
+      <div class="score-label-sub">punktów</div>
+    </div>
+    <div class="result-right">
+      <div class="severity-label c-low" id="sev-label">Niskie prawdopodobieństwo</div>
+      <div class="severity-range" id="sev-range">Wells ≤ 1</div>
+      <div class="result-desc" id="sev-desc">Niskie kliniczne prawdopodobieństwo ZP. Rozważyć oznaczenie D-dimerów.</div>
+      <div class="outcomes-row">
+        <div class="outcome-box">
+          <div class="outcome-val c-low" id="out-prev">~1,3%</div>
+          <div class="outcome-lbl">Prawdopodobieństwo ZP</div>
+        </div>
+        <div class="outcome-box">
+          <div class="outcome-val c-low" id="out-action">D-dimery</div>
+          <div class="outcome-lbl">Zalecane postępowanie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="source">
+    Wells PS, et al. Excluding pulmonary embolism at the bedside without diagnostic imaging: management of patients with suspected pulmonary embolism presenting to the emergency department. <em>Ann Intern Med</em> 2001; 135(2): 98–107.
+  </div>
+</div>
+
+<script>
+const PARAMS = [
+  { id:'dvt',      label:'Kliniczne objawy zakrzepicy żył głębokich (ZŻG)', desc:'Obrzęk, bolesność uciskowa wzdłuż żył głębokich', val:3 },
+  { id:'altdx',    label:'ZP jest najbardziej prawdopodobnym rozpoznaniem', desc:'Brak alternatywnej diagnozy bardziej prawdopodobnej niż ZP', val:3 },
+  { id:'hr',       label:'Tętno > 100/min', desc:'', val:1.5 },
+  { id:'immob',    label:'Unieruchomienie lub zabieg chirurgiczny w ciągu ostatnich 4 tygodni', desc:'Leżenie w łóżku ≥ 3 dni lub operacja w ciągu 4 tygodni', val:1.5 },
+  { id:'dvthx',    label:'Przebyty epizod ZP lub ZŻG', desc:'', val:1.5 },
+  { id:'hemoptysis', label:'Krwioplucie', desc:'', val:1 },
+  { id:'cancer',   label:'Aktywna choroba nowotworowa', desc:'Leczenie w ciągu ostatnich 6 miesięcy lub leczenie paliatywne', val:1 },
+];
+
+const OUTCOMES_3tier = [
+  { max:1,   label:'Niskie prawdopodobieństwo',         range:'Wells ≤ 1',    cls:'c-low',  prev:'~1,3%',  action:'D-dimery',               desc:'Niskie kliniczne prawdopodobieństwo ZP. Rozważyć oznaczenie D-dimerów – wynik ujemny wyklucza ZP.' },
+  { max:6,   label:'Pośrednie prawdopodobieństwo',      range:'Wells 2–6',    cls:'c-mid',  prev:'~16,2%', action:'CTPA / scyntygrafia',     desc:'Pośrednie kliniczne prawdopodobieństwo ZP. Wskazana diagnostyka obrazowa (CTPA lub scyntygrafia V/Q).' },
+  { max:99,  label:'Wysokie prawdopodobieństwo',        range:'Wells > 6',    cls:'c-high', prev:'~37,5%', action:'CTPA pilnie',              desc:'Wysokie kliniczne prawdopodobieństwo ZP. Wskazana pilna CTPA. Rozważyć empiryczne leczenie przeciwkrzepliwe.' },
+];
+
+const state = {};
+PARAMS.forEach(p => state[p.id] = 0);
+
+const container = document.getElementById('params-container');
+PARAMS.forEach(p => {
+  const block = document.createElement('div');
+  block.className = 'param-block';
+  block.innerHTML = `
+    <div class="param-header">
+      <div style="flex:1">
+        <div class="param-name">${p.label}</div>
+        ${p.desc ? `<div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.2rem;">${p.desc}</div>` : ''}
+      </div>
+      <span class="param-score" id="sc-${p.id}">Nie</span>
+    </div>
+    <div class="btn-group" data-param="${p.id}" data-val="${p.val}">
+      <button class="opt-btn selected" data-val="0">Nie</button>
+      <button class="opt-btn" data-val="${p.val}">Tak <span class="pts">+${p.val}</span></button>
+    </div>`;
+  container.appendChild(block);
+});
+
+document.querySelectorAll('.btn-group').forEach(group => {
+  const param = group.dataset.param;
+  const btns = group.querySelectorAll('.opt-btn');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state[param] = parseFloat(btn.dataset.val) || 0;
+      render();
+    });
+  });
+});
+
+function render() {
+  let total = 0;
+  PARAMS.forEach(p => total += state[p.id]);
+  const display = total % 1 === 0 ? total : total.toFixed(1);
+  document.getElementById('score-num').textContent = display;
+
+  const o = OUTCOMES_3tier.find(o => total <= o.max);
+  document.getElementById('score-num').className = 'score-number ' + o.cls;
+  const sevEl = document.getElementById('sev-label');
+  sevEl.textContent = o.label; sevEl.className = 'severity-label ' + o.cls;
+  document.getElementById('sev-range').textContent = o.range;
+  document.getElementById('sev-desc').textContent = o.desc;
+  document.getElementById('out-prev').textContent = o.prev;
+  document.getElementById('out-prev').className = 'outcome-val ' + o.cls;
+  document.getElementById('out-action').textContent = o.action;
+  document.getElementById('out-action').className = 'outcome-val ' + o.cls;
+
+  PARAMS.forEach(p => {
+    const el = document.getElementById('sc-' + p.id);
+    if (!el) return;
+    el.textContent = state[p.id] ? 'Tak' : 'Nie';
+    el.className = 'param-score' + (state[p.id] ? ' scored' : '');
+  });
+}
+
+function resetAll() {
+  document.querySelectorAll('.btn-group').forEach(group => {
+    const btns = group.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.classList.remove('selected'));
+    btns[0].classList.add('selected');
+    state[group.dataset.param] = 0;
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
